@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>ویرایش نمایه - Roya 11</title>
+  <link rel="icon" type="image/x-icon" href="https://i.ibb.co/2Y0TgqYr/file-00000000a56462468cec427eb252720e.png">
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: 'Vazirmatn', Tahoma, sans-serif;
+      background: linear-gradient(160deg, #1a1a1a 0%, #0f0f0f 50%, #1a0505 100%);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+
+    .profile-container {
+      width: 100%;
+      max-width: 380px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 1.5rem;
+      padding: 28px 20px 24px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      animation: fadeInUp 0.4s ease-out;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: #fff;
+      text-align: center;
+      letter-spacing: -0.02em;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    label {
+      font-weight: 500;
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.45);
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .required::after {
+      content: '*';
+      color: #e50914;
+      font-size: 0.7rem;
+      margin-right: 2px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    input[type="text"],
+    input[type="tel"] {
+      width: 100%;
+      padding: 11px 14px 11px 38px;
+      font-size: 0.875rem;
+      font-family: 'Vazirmatn', Tahoma, sans-serif;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 0.75rem;
+      outline: none;
+      transition: all 0.25s ease;
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+    }
+
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.3);
+    }
+
+    input:focus {
+      border-color: #e50914;
+      box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.2);
+      background: rgba(255, 255, 255, 0.09);
+    }
+
+    .input-icon {
+      position: absolute;
+      right: 12px;
+      color: rgba(255, 255, 255, 0.35);
+      font-size: 0.85rem;
+      pointer-events: none;
+    }
+
+    .btn-group {
+      margin-top: 8px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    button {
+      font-family: 'Vazirmatn', Tahoma, sans-serif;
+      font-weight: 600;
+      border: none;
+      padding: 11px 16px;
+      border-radius: 0.75rem;
+      font-size: 0.8125rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    button:active {
+      transform: scale(0.96);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #e50914, #c40812);
+      color: white;
+      box-shadow: 0 4px 14px rgba(229, 9, 20, 0.35);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 6px 20px rgba(229, 9, 20, 0.45);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      color: rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .message {
+      font-size: 0.8rem;
+      min-height: 18px;
+      text-align: center;
+      color: #f87171;
+    }
+
+    .profile-photo-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .profile-photo-wrapper {
+      position: relative;
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      box-shadow: 0 0 0 3px #e50914, 0 0 0 6px rgba(229, 9, 20, 0.25), 0 8px 24px rgba(229, 9, 20, 0.3);
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .profile-photo-wrapper:hover {
+      transform: scale(1.04);
+    }
+
+    #profilePhoto {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      background-color: #1a1a1a;
+    }
+
+    .photo-upload-btn {
+      margin-top: 12px;
+      background: rgba(255, 255, 255, 0.06);
+      color: rgba(255, 255, 255, 0.8);
+      padding: 7px 14px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .photo-upload-btn:hover {
+      background: rgba(229, 9, 20, 0.15);
+      border-color: rgba(229, 9, 20, 0.4);
+      color: #fff;
+    }
+
+    #photoInput {
+      display: none;
+    }
+
+    .loading-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      z-index: 10;
+    }
+
+    .spinner {
+      width: 24px;
+      height: 24px;
+      border: 2.5px solid rgba(255, 255, 255, 0.2);
+      border-top: 2.5px solid #e50914;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    .notification {
+      position: fixed;
+      bottom: 24px;
+      right: 16px;
+      left: 16px;
+      max-width: 320px;
+      margin: 0 auto;
+      background: rgba(30, 30, 30, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #fff;
+      padding: 0.75rem 1.25rem;
+      border-radius: 0.875rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: all 0.3s ease;
+      text-align: center;
+      font-size: 0.875rem;
+    }
+
+    .notification.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 380px) {
+      .profile-container {
+        padding: 24px 16px 20px;
+      }
+
+      .profile-photo-wrapper {
+        width: 84px;
+        height: 84px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="profile-container">
+    <h2>ویرایش نمایه</h2>
+
+    <div class="profile-photo-container">
+      <div class="profile-photo-wrapper">
+        <div class="loading-overlay" id="photoLoading">
+          <div class="spinner"></div>
+        </div>
+        <img id="profilePhoto" src="https://via.placeholder.com/120?text=+" alt="عکس نمایه" loading="lazy" />
+      </div>
+      <label for="photoInput" class="photo-upload-btn">
+        <i class="fas fa-camera"></i>
+        تغییر عکس
+      </label>
+      <input type="file" id="photoInput" accept="image/*" />
+    </div>
+
+    <form id="profileForm" autocomplete="off">
+      <div class="form-group">
+        <label for="fullname" class="required">نام کامل</label>
+        <div class="input-wrapper">
+          <i class="input-icon fas fa-user"></i>
+          <input type="text" id="fullname" name="fullname" placeholder="نام و نام خانوادگی" required />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">شماره تلفن (اختیاری)</label>
+        <div class="input-wrapper">
+          <i class="input-icon fas fa-phone"></i>
+          <input type="tel" id="phone" name="phone" placeholder="+93XXXXXXXXX" dir="ltr" />
+        </div>
+      </div>
+
+      <div class="message" id="formMessage"></div>
+
+      <div class="btn-group">
+        <button type="submit" class="btn-primary">
+          <i class="fas fa-save"></i>
+          ذخیره
+        </button>
+        <button type="button" id="cancelBtn" class="btn-secondary">
+          <i class="fas fa-times"></i>
+          انصراف
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Firebase Libraries -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+  <script>
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDLfUbSG30O474XPAPY8QpMzo19EMfLWFc",
+      authDomain: "josh-7b6a0.firebaseapp.com",
+      databaseURL: "https://josh-7b6a0-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "josh-7b6a0",
+      storageBucket: "josh-7b6a0.appspot.com",
+      messagingSenderId: "639816255525",
+      appId: "1:639816255525:web:71a3e87374c3e7c68e17cc",
+      measurementId: "G-P2ZSBTN8FP"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+    const auth = firebase.auth();
+
+    // DOM elements
+    const fullnameInput = document.getElementById('fullname');
+    const phoneInput = document.getElementById('phone');
+    const profilePhoto = document.getElementById('profilePhoto');
+    const photoInput = document.getElementById('photoInput');
+    const form = document.getElementById('profileForm');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const photoLoading = document.getElementById('photoLoading');
+    const formMessage = document.getElementById('formMessage');
+
+    // Function to show notification
+    function showNotification(message, type = 'success') {
+      const notification = document.createElement('div');
+      notification.className = 'notification';
+      notification.textContent = message;
+      if (type === 'error') {
+        notification.style.borderColor = 'rgba(239, 68, 68, 0.4)';
+      }
+      document.body.appendChild(notification);
+
+      setTimeout(() => {
+        notification.classList.add('visible');
+      }, 10);
+
+      setTimeout(() => {
+        notification.classList.remove('visible');
+        setTimeout(() => {
+          if (document.body.contains(notification)) {
+            document.body.removeChild(notification);
+          }
+        }, 300);
+      }, 3000);
+    }
+
+    // Function to get user initials
+    function getUserInitials(fullname) {
+      if (!fullname) return '+';
+      return fullname
+        .split(' ')
+        .map(n => n[0])
+        .join('')
+        .toUpperCase()
+        .substring(0, 2);
+    }
+
+    // Function to get default avatar
+    function getDefaultAvatar(initials) {
+      return `https://via.placeholder.com/120/e50914/ffffff?text=${initials}`;
+    }
+
+    // Check auth state
+    auth.onAuthStateChanged((user) => {
+      try {
+        if (!user) {
+          Swal.fire({
+            title: 'ورود لازم است',
+            text: 'لطفاً ابتدا وارد حساب کاربری خود شوید',
+            icon: 'warning',
+            confirmButtonText: 'ورود',
+            confirmButtonColor: '#e50914',
+            background: 'rgba(30, 30, 30, 0.95)',
+            color: '#fff',
+            backdrop: true,
+            allowOutsideClick: false
+          }).then(() => {
+            window.location.href = 'index.html';
+          });
+          return;
+        }
+        loadUserData(user);
+      } catch (error) {
+        console.error('Auth state error:', error);
+        showNotification('خطا در بررسی وضعیت ورود', 'error');
+      }
+    });
+
+    // Load user data
+    function loadUserData(user) {
+      const userId = user.uid;
+      const userRef = database.ref('users/' + userId);
+
+      userRef.once('value')
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            const userData = snapshot.val();
+            if (userData.fullname) fullnameInput.value = userData.fullname;
+            if (userData.phone) phoneInput.value = userData.phone;
+
+            if (userData.profilePhoto && userData.profilePhoto.trim() !== '') {
+              profilePhoto.src = userData.profilePhoto;
+            } else {
+              const providerData = user.providerData;
+              const googleProvider = providerData.find(provider => provider.providerId === 'google.com');
+              if (googleProvider && googleProvider.photoURL) {
+                profilePhoto.src = googleProvider.photoURL;
+              } else {
+                const initials = getUserInitials(userData.fullname || user.displayName);
+                profilePhoto.src = getDefaultAvatar(initials);
+              }
+            }
+          } else {
+            const providerData = user.providerData;
+            const googleProvider = providerData.find(provider => provider.providerId === 'google.com');
+            let profilePhotoUrl = '';
+
+            if (googleProvider && googleProvider.photoURL) {
+              profilePhotoUrl = googleProvider.photoURL;
+            } else {
+              const initials = getUserInitials(user.displayName);
+              profilePhotoUrl = getDefaultAvatar(initials);
+            }
+
+            userRef.set({
+              fullname: user.displayName || '',
+              phone: '',
+              profilePhoto: profilePhotoUrl,
+              lastUpdated: new Date().toISOString()
+            }).then(() => {
+              profilePhoto.src = profilePhotoUrl;
+            }).catch((error) => {
+              console.error('Error creating user record:', error);
+              showNotification('خطا در ایجاد پروفایل کاربر', 'error');
+            });
+          }
+        })
+        .catch((error) => {
+          console.error('Error loading user data:', error);
+          showNotification('خطا در دریافت اطلاعات نمایه', 'error');
+        });
+    }
+
+    // Compress and convert image to Base64
+    function compressAndConvertToBase64(file, maxWidth = 400, quality = 0.8) {
+      return new Promise((resolve, reject) => {
+        if (!file.type.match('image.*')) {
+          reject(new Error('فایل انتخاب شده تصویر نیست'));
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (readerEvent) => {
+          const image = new Image();
+          image.onload = () => {
+            const canvas = document.createElement('canvas');
+            let width = image.width;
+            let height = image.height;
+
+            if (width > maxWidth) {
+              height *= maxWidth / width;
+              width = maxWidth;
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(image, 0, 0, width, height);
+
+            resolve(canvas.toDataURL('image/jpeg', quality));
+          };
+          image.src = readerEvent.target.result;
+        };
+        reader.onerror = error => reject(error);
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // Handle profile photo upload
+    photoInput.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      if (file.size > 5 * 1024 * 1024) {
+        showNotification('حجم عکس باید کمتر از 5 مگابایت باشد', 'error');
+        return;
+      }
+
+      try {
+        photoLoading.style.display = 'flex';
+        const base64Image = await compressAndConvertToBase64(file);
+        profilePhoto.src = base64Image;
+        const userId = auth.currentUser?.uid;
+        if (!userId) throw new Error('کاربر وارد نشده است');
+        await database.ref('users/' + userId).update({
+          profilePhoto: base64Image,
+          lastUpdated: new Date().toISOString()
+        });
+        showNotification('عکس نمایه با موفقیت ذخیره شد');
+      } catch (error) {
+        console.error('Error saving photo:', error);
+        showNotification('خطا در ذخیره عکس نمایه', 'error');
+      } finally {
+        photoLoading.style.display = 'none';
+      }
+    });
+
+    // Form validation
+    function validateForm() {
+      formMessage.textContent = '';
+      if (!fullnameInput.value.trim()) {
+        formMessage.textContent = 'نام کامل الزامی است';
+        return false;
+      }
+      if (fullnameInput.value.length > 100) {
+        formMessage.textContent = 'نام کامل نمی‌تواند بیشتر از ۱۰۰ کاراکتر باشد';
+        return false;
+      }
+      if (phoneInput.value && !/^\+93[0-9]{9}$/.test(phoneInput.value)) {
+        formMessage.textContent = 'شماره تلفن باید با +93 شروع شود و ۱۲ رقم داشته باشد';
+        return false;
+      }
+      return true;
+    }
+
+    // Form submission
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!validateForm()) return;
+
+      const user = auth.currentUser;
+      if (!user) {
+        showNotification('کاربر وارد نشده است. لطفاً دوباره وارد شوید.', 'error');
+        return;
+      }
+
+      try {
+        const updates = {
+          fullname: fullnameInput.value.trim(),
+          phone: phoneInput.value.trim(),
+          lastUpdated: new Date().toISOString()
+        };
+
+        await database.ref(`users/${user.uid}`).update(updates);
+        Swal.fire({
+          title: 'موفقیت',
+          text: 'اطلاعات با موفقیت ذخیره شد',
+          icon: 'success',
+          confirmButtonText: 'متوجه شدم',
+          confirmButtonColor: '#e50914',
+          background: 'rgba(30, 30, 30, 0.95)',
+          color: '#fff',
+          backdrop: true
+        }).then(() => {
+          window.location.href = 'profile.html';
+        });
+      } catch (error) {
+        console.error('Error saving changes:', error);
+        showNotification('خطا در ذخیره تغییرات', 'error');
+      }
+    });
+
+    // Cancel button
+    cancelBtn.addEventListener('click', () => {
+      Swal.fire({
+        title: 'انصراف از تغییرات',
+        text: 'آیا مطمئن هستید می‌خواهید از ذخیره تغییرات انصراف دهید؟',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'بله، انصراف',
+        cancelButtonText: 'خیر، ادامه ویرایش',
+        confirmButtonColor: '#e50914',
+        cancelButtonColor: '#555',
+        background: 'rgba(30, 30, 30, 0.95)',
+        color: '#fff',
+        backdrop: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = 'profile.html';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
