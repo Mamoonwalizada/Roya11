@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Roya 11 - صفحه اصلی</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" />
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    :root {
+      --primary-color: #b91c1c;
+      --primary-light: #ef4444;
+      --secondary-color: #ffffff;
+      --accent-color: #ffffff;
+      --text-color: #111827;
+      --text-light: #6b7280;
+      --bg-light: #f3f4f6;
+      --bg-dark: #1f2937;
+      --card-bg: rgba(255, 255, 255, 0.95);
+      --glass-bg: rgba(255, 255, 255, 0.25);
+      --glass-border: rgba(255, 255, 255, 0.2);
+      --card-radius: 14px;
+      --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
+      --transition: all 0.3s ease;
+      --gradient: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+    }
+
+    .dark-mode {
+      --text-color: #e2e8f0;
+      --text-light: #9ca3af;
+      --bg-light: #1f2937;
+      --bg-dark: #f3f4f6;
+      --card-bg: rgba(31, 41, 55, 0.95);
+      --glass-bg: rgba(31, 41, 55, 0.25);
+      --glass-border: rgba(255, 255, 255, 0.15);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Vazirmatn', Tahoma, sans-serif;
+      color: var(--text-color);
+      background: var(--bg-light);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition);
+      background-image: 
+        radial-gradient(at 80% 20%, var(--primary-light) 0, transparent 70%),
+        radial-gradient(at 20% 80%, var(--secondary-color) 0, transparent 70%);
+      background-attachment: fixed;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-light);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary-light);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--primary-color);
+    }
+
+    /* Header */
+    header {
+      background: var(--gradient);
+      color: #ffffff;
+      padding: 1rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow-md);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(12px);
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .logo-container img {
+      height: 40px;
+      width: 40px;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+      transition: var(--transition);
+    }
+
+    .logo-container:hover img {
+      transform: rotate(10deg) scale(1.1);
+    }
+
+    .site-name {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .theme-toggle, .menu-icon {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: var(--transition);
+      backdrop-filter: blur(8px);
+      color: #ffffff;
+    }
+
+    .theme-toggle:hover, .menu-icon:hover {
+      background: var(--primary-light);
+      transform: scale(1.1);
+      box-shadow: var(--shadow-md);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      height: 100%;
+      width: 0;
+      position: fixed;
+      top: 0;
+      right: 0;
+      background: var(--card-bg);
+      overflow-x: hidden;
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      padding-top: 1.5rem;
+      box-shadow: -4px 0 12px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      backdrop-filter: blur(12px);
+      border-left: 1px solid var(--glass-border);
+    }
+
+    .sidebar.open {
+      width: 300px;
+    }
+
+    .sidebar a {
+      padding: 1rem 2rem;
+      text-decoration: none;
+      font-size: 1rem;
+      color: var(--text-color);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: var(--transition);
+      border-right: 3px solid transparent;
+      margin: 0.5rem 0;
+      border-radius: 0 12px 12px 0;
+      cursor: pointer;
+    }
+
+    .sidebar a i {
+      font-size: 1.2rem;
+    }
+
+    .sidebar a:hover {
+      background: var(--primary-light);
+      color: #ffffff;
+      border-right: 3px solid var(--primary-color);
+      transform: translateX(-5px);
+    }
+
+    .sidebar a.active {
+      background: var(--primary-light);
+      color: #ffffff;
+      border-right: 3px solid var(--primary-color);
+      font-weight: 600;
+    }
+
+    .profile-box {
+      text-align: center;
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--glass-border);
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+      background: var(--gradient);
+      border-radius: 0 0 12px 12px;
+    }
+
+    .profile-box img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #ffffff;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+    }
+
+    .profile-box:hover img {
+      transform: scale(1.1);
+      box-shadow: var(--shadow-md);
+    }
+
+    .profile-box small {
+      display: block;
+      margin-top: 0.75rem;
+      color: #ffffff;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition);
+      z-index: 999;
+      backdrop-filter: blur(5px);
+    }
+
+    .overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Main Content */
+    .main {
+      flex: 1;
+      padding: 1.5rem 0.8rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .welcome-message {
+      max-width: 900px;
+      margin: 0 auto 1.8rem;
+      text-align: center;
+      background: var(--card-bg);
+      padding: 1.8rem;
+      border-radius: var(--card-radius);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow-md);
+      animation: fadeInScale 0.8s ease-out;
+    }
+
+    .welcome-message h1 {
+      font-size: 2.1rem;
+      margin-bottom: 0.7rem;
+      color: var(--primary-color);
+      font-weight: 700;
+    }
+
+    .welcome-message p {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--text-light);
+    }
+
+    /* ===== سه کارت کنار هم ===== */
+    .features-container {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      gap: 1rem;
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 0.4rem;
+      overflow: hidden;
+    }
+
+    .feature-card {
+      flex: 1 1 0;
+      min-width: 0;
+      background: var(--card-bg);
+      border-radius: var(--card-radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      animation: fadeInScale 0.5s ease-out;
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(12px);
+      cursor: pointer;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .feature-image {
+      height: 155px;
+      width: 100%;
+      object-fit: cover;
+      transition: var(--transition);
+      pointer-events: none;
+    }
+
+    .feature-card:hover .feature-image {
+      transform: scale(1.04);
+    }
+
+    .feature-content {
+      padding: 1rem 0.85rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+      pointer-events: none;
+    }
+
+    .feature-title {
+      font-size: 1.05rem;
+      color: var(--primary-color);
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .feature-title i {
+      font-size: 1rem;
+      color: var(--primary-light);
+      flex-shrink: 0;
+    }
+
+    .feature-desc {
+      font-size: 0.85rem;
+      color: var(--text-light);
+      line-height: 1.5;
+      flex-grow: 1;
+    }
+
+    .feature-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      background: var(--gradient);
+      color: #ffffff;
+      padding: 0.55rem 1rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+      border: none;
+      cursor: pointer;
+      margin-top: auto;
+      white-space: nowrap;
+      pointer-events: auto;
+    }
+
+    .feature-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      background: linear-gradient(135deg, var(--primary-light), var(--primary-color));
+    }
+
+    .feature-btn:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.3);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 1.5rem 1rem;
+      color: var(--text-light);
+      font-size: 0.9rem;
+      border-top: 1px solid var(--glass-border);
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      margin-top: auto;
+    }
+
+    .footer-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .social-links a {
+      color: var(--text-color);
+      font-size: 1.3rem;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: var(--transition);
+      backdrop-filter: blur(8px);
+    }
+
+    .social-links a:hover {
+      color: #ffffff;
+      background: var(--primary-light);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+
+    /* خط فوتر با رنگ سرخ خوانا */
+    .footer-credit {
+      color: #b91c1c;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.3px;
+    }
+
+    .dark-mode .footer-credit {
+      color: #ef4444;
+    }
+
+    /* Scroll to Top */
+    .scroll-to-top {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--gradient);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: var(--shadow-md);
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition);
+    }
+
+    .scroll-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .scroll-to-top:hover {
+      transform: scale(1.1);
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* Notification */
+    .notification {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--primary-color);
+      color: #ffffff;
+      padding: 0.75rem 1.25rem;
+      border-radius: var(--card-radius);
+      box-shadow: var(--shadow-lg);
+      z-index: 1000;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s ease;
+    }
+
+    .notification.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes fadeInScale {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* ریسپانسیو */
+    @media (max-width: 800px) {
+      .features-container {
+        gap: 0.7rem;
+      }
+
+      .feature-image {
+        height: 130px;
+      }
+
+      .feature-content {
+        padding: 0.85rem 0.7rem;
+        gap: 0.45rem;
+      }
+
+      .feature-title {
+        font-size: 0.95rem;
+      }
+
+      .feature-title i {
+        font-size: 0.9rem;
+      }
+
+      .feature-desc {
+        font-size: 0.78rem;
+      }
+
+      .feature-btn {
+        padding: 0.45rem 0.85rem;
+        font-size: 0.78rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .features-container {
+        gap: 0.5rem;
+        padding: 0 0.2rem;
+      }
+
+      .feature-image {
+        height: 105px;
+      }
+
+      .feature-content {
+        padding: 0.7rem 0.55rem;
+        gap: 0.35rem;
+      }
+
+      .feature-title {
+        font-size: 0.82rem;
+        gap: 0.3rem;
+      }
+
+      .feature-title i {
+        font-size: 0.78rem;
+      }
+
+      .feature-desc {
+        font-size: 0.7rem;
+        line-height: 1.4;
+      }
+
+      .feature-btn {
+        padding: 0.4rem 0.65rem;
+        font-size: 0.72rem;
+      }
+
+      .welcome-message h1 {
+        font-size: 1.7rem;
+      }
+
+      .welcome-message {
+        padding: 1.4rem;
+        margin-bottom: 1.4rem;
+      }
+
+      .sidebar.open {
+        width: 260px;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .features-container {
+        gap: 0.4rem;
+      }
+
+      .feature-image {
+        height: 90px;
+      }
+
+      .feature-content {
+        padding: 0.55rem 0.4rem;
+      }
+
+      .feature-title {
+        font-size: 0.75rem;
+      }
+
+      .feature-title i {
+        font-size: 0.7rem;
+      }
+
+      .feature-desc {
+        font-size: 0.65rem;
+      }
+
+      .feature-btn {
+        padding: 0.35rem 0.5rem;
+        font-size: 0.68rem;
+      }
+
+      .site-name {
+        font-size: 1.25rem;
+      }
+
+      .logo-container img {
+        height: 34px;
+        width: 34px;
+      }
+
+      .theme-toggle, .menu-icon {
+        width: 34px;
+        height: 34px;
+        font-size: 0.95rem;
+      }
+
+      .scroll-to-top {
+        width: 42px;
+        height: 42px;
+        bottom: 12px;
+        left: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <button class="scroll-to-top" id="scrollToTop" aria-label="بازگشت به بالا">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <header>
+    <div class="logo-container" id="logoContainer" role="button" aria-label="صفحه اصلی">
+      <img src="https://i.ibb.co/jvyRR28b/file-000000002a0c820a96f10cd6734bc524.png" alt="Roya 11 Logo" loading="lazy" />
+      <span class="site-name">Roya 11</span>
+    </div>
+    <div class="header-actions">
+      <button class="theme-toggle" id="themeToggle" aria-label="تغییر تم">
+        <i class="fas fa-moon"></i>
+      </button>
+      <button class="menu-icon" id="menuIcon" aria-label="باز کردن منو">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <div id="sidebar" class="sidebar">
+    <div class="profile-box" id="profileBox" role="button" aria-label="پروفایل کاربر">
+      <img id="profileImage" src="https://via.placeholder.com/80" alt="نمایه کاربر" loading="lazy" />
+      <small id="profileName">کاربر مهمان</small>
+    </div>
+    <a href="prizes.html" aria-label="جوایز"><i class="fas fa-trophy"></i> جوایز</a>
+    <a href="howtoplay.html" aria-label="رهنمای بازی"><i class="fas fa-gamepad"></i> رهنمای بازی</a>
+    <a href="points.html" aria-label="سیستم امتیاز"><i class="fas fa-star"></i> سیستم امتیاز</a>
+    <a href="download.html" aria-label="دانلود برنامه"><i class="fas fa-download"></i> دانلود برنامه</a>
+    <a href="contact.html" aria-label="تماس با ما"><i class="fas fa-headset"></i> تماس با ما</a>
+  </div>
+  <div id="overlay" class="overlay" aria-hidden="true"></div>
+
+  <div class="main">
+    <div class="welcome-message">
+      <h1>به Roya 11 خوش آمدید!</h1>
+      <p>جامعه بازی های هیجان انگیز ما را کشف کنید، با دوستانتان رقابت کنید، امتیاز کسب کنید و از تجربه ای بی نظیر لذت ببرید!</p>
+    </div>
+
+    <div class="features-container">
+      <div class="feature-card" data-page="josh_matches_show.html">
+        <img src="https://i.ibb.co/BKtCXxbR/Screenshot-20250809-083454-Chat-GPT.jpg" alt="بازی های آینده" class="feature-image" loading="lazy" />
+        <div class="feature-content">
+          <h3 class="feature-title"><i class="fas fa-calendar-days"></i> بازی های آینده</h3>
+          <p class="feature-desc">با بازی های جدید و هیجان انگیز آشنا شوید و برای شرکت در آن ها آماده باشید.</p>
+          <button class="feature-btn" aria-label="مشاهده بازی های آینده">
+            مشاهده <i class="fas fa-arrow-left"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="feature-card" data-page="josh_result.html">
+        <img src="https://i.ibb.co/Nd5FVP8y/gettyimages-2158819705.jpg" alt="نتایج شرکت کنندگان" class="feature-image" loading="lazy" />
+        <div class="feature-content">
+          <h3 class="feature-title"><i class="fas fa-chart-line"></i> نتایج شرکت کنندگان</h3>
+          <p class="feature-desc">نتایج و آمار کلی شرکت کنندگان در بازی های مختلف را مشاهده کنید و با دیگران مقایسه کنید.</p>
+          <button class="feature-btn" aria-label="مشاهده نتایج شرکت کنندگان">
+            مشاهده <i class="fas fa-arrow-left"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="feature-card" data-page="josh_players.html">
+        <img src="https://i.ibb.co/YFzM2c5B/images-4.jpg" alt="نتایج بازیکنان" class="feature-image" loading="lazy" />
+        <div class="feature-content">
+          <h3 class="feature-title"><i class="fas fa-ranking-star"></i> نتایج بازیکنان</h3>
+          <p class="feature-desc">رده بندی و عملکرد بازیکنان برتر را مشاهده کنید و ببینید چه کسانی در صدر جدول قرار دارند.</p>
+          <button class="feature-btn" aria-label="مشاهده نتایج بازیکنان">
+            مشاهده <i class="fas fa-arrow-left"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <div class="social-links">
+        <a href="https://www.facebook.com/mamoon.walizada.2025" target="_blank" aria-label="فیسبوک"><i class="fab fa-facebook"></i></a>
+        <a href="https://www.instagram.com/mamoon_walizada?igsh=cXdwZnhqNTlqOW80" target="_blank" aria-label="اینستاگرام"><i class="fab fa-instagram"></i></a>
+      </div>
+       <div class="footer-credit">🌟 Founded by Mamoon Walizada | © 2025 Roya 11</div>
+   </div>
+  </footer>
+
+  <script>
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDLfUbSG30O474XPAPY8QpMzo19EMfLWFc",
+      authDomain: "josh-7b6a0.firebaseapp.com",
+      databaseURL: "https://josh-7b6a0-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "josh-7b6a0",
+      storageBucket: "josh-7b6a0.appspot.com",
+      messagingSenderId: "639816255525",
+      appId: "1:639816255525:web:71a3e87374c3e7c68e17cc",
+      measurementId: "G-P2ZSBTN8FP"
+    };
+
+    // Initialize Firebase
+    try {
+      const app = firebase.initializeApp(firebaseConfig);
+      const db = firebase.database();
+      const auth = firebase.auth();
+
+      // DOM elements
+      const sidebar = document.getElementById("sidebar");
+      const overlay = document.getElementById("overlay");
+      const themeToggle = document.getElementById("themeToggle");
+      const scrollToTop = document.getElementById("scrollToTop");
+      const body = document.body;
+      const logoContainer = document.getElementById("logoContainer");
+      const menuIcon = document.getElementById("menuIcon");
+      const profileBox = document.getElementById("profileBox");
+      const featureCards = document.querySelectorAll(".feature-card");
+      const sidebarLinks = document.querySelectorAll(".sidebar a");
+
+      // Theme management
+      function initTheme() {
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        body.classList.toggle('dark-mode', savedTheme === 'dark');
+        updateThemeIcon(savedTheme);
+      }
+
+      function toggleTheme() {
+        body.classList.toggle('dark-mode');
+        const newTheme = body.classList.contains('dark-mode') ? 'dark' : 'light';
+        localStorage.setItem('theme', newTheme);
+        updateThemeIcon(newTheme);
+        showNotification('تم تغییر کرد');
+      }
+
+      function updateThemeIcon(theme) {
+        const icon = themeToggle.querySelector('i');
+        icon.className = theme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+      }
+
+      // Sidebar functions
+      function openSidebar() {
+        sidebar.classList.add('open');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeSidebar() {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
+      // Scroll to top
+      function toggleScrollToTop() {
+        scrollToTop.classList.toggle('visible', window.scrollY > 300);
+      }
+
+      // Navigation function
+      function navigateTo(page) {
+        try {
+          const user = auth.currentUser;
+          if (user || page === 'index.html') {
+            window.location.href = page;
+          } else {
+            showLoginAlert();
+          }
+        } catch (error) {
+          console.error('Navigation error:', error);
+          showNotification('خطا در هدایت به صفحه');
+        }
+      }
+
+      // Notification
+      function showNotification(message) {
+        const notification = document.createElement('div');
+        notification.className = 'notification';
+        notification.textContent = message;
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+          notification.classList.add('visible');
+        }, 10);
+
+        setTimeout(() => {
+          notification.classList.remove('visible');
+          setTimeout(() => {
+            document.body.removeChild(notification);
+          }, 300);
+        }, 3000);
+      }
+
+      // Google Sign-In
+      function signInWithGoogle() {
+        try {
+          const provider = new firebase.auth.GoogleAuthProvider();
+
+          Swal.fire({
+            title: 'در حال انتقال به گوگل...',
+            text: 'لطفاً منتظر بمانید',
+            icon: 'info',
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            didOpen: () => {
+              Swal.showLoading();
+            }
+          });
+
+          auth.signInWithPopup(provider)
+            .then((result) => {
+              const user = result.user;
+              const userData = {
+                uid: user.uid,
+                fullname: user.displayName || 'کاربر ناشناس',
+                email: user.email || '',
+                profilePhoto: user.photoURL || 'https://via.placeholder.com/80',
+                createdAt: firebase.database.ServerValue.TIMESTAMP,
+                lastLogin: firebase.database.ServerValue.TIMESTAMP
+              };
+
+              db.ref('users/' + user.uid).set(userData)
+                .then(() => {
+                  localStorage.setItem('user', JSON.stringify(userData));
+                  document.getElementById('profileName').textContent = userData.fullname;
+                  document.getElementById('profileImage').src = userData.profilePhoto;
+
+                  Swal.fire({
+                    title: 'خوش آمدید!',
+                    text: `${userData.fullname} عزیز، به Roya 11 خوش آمدید`,
+                    icon: 'success',
+                    confirmButtonText: 'متشکرم',
+                    confirmButtonColor: '#b91c1c',
+                    background: 'var(--card-bg)',
+                    color: 'var(--text-color)'
+                  });
+                  showNotification('با موفقیت وارد شدید!');
+                })
+                .catch((error) => {
+                  console.error('Error saving user data:', error);
+                  Swal.fire({
+                    title: 'خطا',
+                    text: 'خطا در ذخیره اطلاعات: ' + error.message,
+                    icon: 'error',
+                    confirmButtonText: 'متوجه شدم',
+                    confirmButtonColor: '#b91c1c',
+                    background: 'var(--card-bg)',
+                    color: 'var(--text-color)'
+                  });
+                });
+            })
+            .catch((error) => {
+              console.error('Error during Google sign-in:', error);
+              Swal.fire({
+                title: 'خطا در ورود',
+                text: error.message,
+                icon: 'error',
+                confirmButtonText: 'متوجه شدم',
+                confirmButtonColor: '#b91c1c',
+                background: 'var(--card-bg)',
+                color: 'var(--text-color)'
+              });
+            });
+        } catch (error) {
+          console.error('Google Sign-In error:', error);
+          showNotification('خطا در فرآیند ورود');
+        }
+      }
+
+      function goToProfile() {
+        try {
+          const user = auth.currentUser;
+          if (user) {
+            navigateTo('profile.html');
+          } else {
+            signInWithGoogle();
+          }
+        } catch (error) {
+          console.error('Profile navigation error:', error);
+          showNotification('خطا در هدایت به نمایه');
+        }
+      }
+
+      function showLoginAlert() {
+        Swal.fire({
+          title: 'ورود لازم است',
+          html: 'برای دسترسی به این بخش باید وارد حساب کاربری شوید',
+          icon: 'info',
+          showCancelButton: true,
+          confirmButtonText: 'ورود با گوگل',
+          cancelButtonText: 'بعداً',
+          confirmButtonColor: '#b91c1c',
+          background: 'var(--card-bg)',
+          color: 'var(--text-color)'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            signInWithGoogle();
+          }
+        });
+      }
+
+      // Initialize app
+      document.addEventListener('DOMContentLoaded', () => {
+        try {
+          initTheme();
+          window.addEventListener('scroll', toggleScrollToTop);
+          scrollToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          });
+
+          logoContainer.addEventListener('click', () => navigateTo('index.html'));
+          menuIcon.addEventListener('click', openSidebar);
+          overlay.addEventListener('click', closeSidebar);
+          themeToggle.addEventListener('click', toggleTheme);
+          profileBox.addEventListener('click', goToProfile);
+          
+          // کلیک روی کل کارت (شامل عکس و متن)
+          featureCards.forEach(card => {
+            const page = card.getAttribute('data-page');
+            card.addEventListener('click', (e) => {
+              if (!e.target.closest('.feature-btn')) {
+                navigateTo(page);
+              }
+            });
+            
+            const button = card.querySelector('.feature-btn');
+            button.addEventListener('click', (e) => {
+              e.stopPropagation();
+              navigateTo(page);
+            });
+          });
+          
+          sidebarLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            link.addEventListener('click', (e) => {
+              e.preventDefault();
+              navigateTo(href);
+            });
+          });
+
+          if (!localStorage.getItem('welcomeShown')) {
+            setTimeout(() => {
+              Swal.fire({
+                title: 'به Roya 11 خوش آمدید!',
+                text: 'جامعه بازی های هیجان انگیز ما را کشف کنید',
+                icon: 'success',
+                confirmButtonText: 'متشکرم',
+                confirmButtonColor: '#b91c1c',
+                background: 'var(--card-bg)',
+                color: 'var(--text-color)'
+              });
+              localStorage.setItem('welcomeShown', 'true');
+            }, 1000);
+          }
+
+          auth.onAuthStateChanged(user => {
+            try {
+              if (user) {
+                const userRef = db.ref('users/' + user.uid);
+                userRef.once('value').then(snapshot => {
+                  if (snapshot.exists()) {
+                    const userData = snapshot.val();
+                    document.getElementById('profileName').textContent = userData.fullname;
+                    document.getElementById('profileImage').src = userData.profilePhoto;
+                    localStorage.setItem('user', JSON.stringify(userData));
+                  }
+                }).catch(error => {
+                  console.error('Error loading user data:', error);
+                  showNotification('خطا در بارگذاری اطلاعات کاربر');
+                });
+
+                db.ref('users/' + user.uid + '/lastLogin').set(firebase.database.ServerValue.TIMESTAMP);
+              } else {
+                document.getElementById('profileName').textContent = 'کاربر مهمان';
+                document.getElementById('profileImage').src = 'https://via.placeholder.com/80';
+
+                const cachedUser = localStorage.getItem('user');
+                if (cachedUser) {
+                  const userData = JSON.parse(cachedUser);
+                  document.getElementById('profileName').textContent = userData.fullname;
+                  document.getElementById('profileImage').src = userData.profilePhoto;
+                }
+              }
+            } catch (error) {
+              console.error('Auth state error:', error);
+              showNotification('خطا در بررسی وضعیت ورود');
+            }
+          });
+
+          if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(registrations => {
+              for (let registration of registrations) {
+                registration.unregister();
+              }
+            }).catch(error => {
+              console.error('Service Worker error:', error);
+              showNotification('خطا در مدیریت Service Worker');
+            });
+          }
+        } catch (error) {
+          console.error('Initialization error:', error);
+          showNotification('خطا در راه اندازی برنامه');
+        }
+      });
+    } catch (error) {
+      console.error('Firebase initialization error:', error);
+      showNotification('خطا در اتصال به Firebase');
+      
+      document.addEventListener('DOMContentLoaded', () => {
+        const themeToggle = document.getElementById("themeToggle");
+        const scrollToTop = document.getElementById("scrollToTop");
+        const sidebar = document.getElementById("sidebar");
+        const overlay = document.getElementById("overlay");
+        const menuIcon = document.getElementById("menuIcon");
+        const logoContainer = document.getElementById("logoContainer");
+        const featureCards = document.querySelectorAll(".feature-card");
+        const sidebarLinks = document.querySelectorAll(".sidebar a");
+        
+        const initTheme = () => {
+          const savedTheme = localStorage.getItem('theme') || 'light';
+          document.body.classList.toggle('dark-mode', savedTheme === 'dark');
+          const icon = themeToggle.querySelector('i');
+          icon.className = savedTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+        };
+        
+        const toggleTheme = () => {
+          document.body.classList.toggle('dark-mode');
+          const newTheme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+          localStorage.setItem('theme', newTheme);
+          const icon = themeToggle.querySelector('i');
+          icon.className = newTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+          showNotification('تم تغییر کرد');
+        };
+        
+        const navigateTo = (page) => {
+          window.location.href = page;
+        };
+        
+        const openSidebar = () => {
+          sidebar.classList.add('open');
+          overlay.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        };
+
+        const closeSidebar = () => {
+          sidebar.classList.remove('open');
+          overlay.classList.remove('active');
+          document.body.style.overflow = '';
+        };
+        
+        const toggleScrollToTop = () => {
+          scrollToTop.classList.toggle('visible', window.scrollY > 300);
+        };
+        
+        initTheme();
+        window.addEventListener('scroll', toggleScrollToTop);
+        scrollToTop.addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        
+        themeToggle.addEventListener('click', toggleTheme);
+        menuIcon.addEventListener('click', openSidebar);
+        overlay.addEventListener('click', closeSidebar);
+        logoContainer.addEventListener('click', () => navigateTo('index.html'));
+        
+        featureCards.forEach(card => {
+          const page = card.getAttribute('data-page');
+          card.addEventListener('click', (e) => {
+            if (!e.target.closest('.feature-btn')) {
+              navigateTo(page);
+            }
+          });
+          
+          const button = card.querySelector('.feature-btn');
+          button.addEventListener('click', (e) => {
+            e.stopPropagation();
+            navigateTo(page);
+          });
+        });
+        
+        sidebarLinks.forEach(link => {
+          const href = link.getAttribute('href');
+          link.addEventListener('click', (e) => {
+            e.preventDefault();
+            navigateTo(href);
+          });
+        });
+      });
+    }
+  </script>
+</body>
+</html>
