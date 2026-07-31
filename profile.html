@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>نمایه - Roya 11</title>
+  <link rel="icon" type="image/x-icon" href="https://i.ibb.co/2Y0TgqYr/file-00000000a56462468cec427eb252720e.png">
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Vazirmatn', 'Tahoma', 'sans-serif'],
+          },
+          colors: {
+            primary: {
+              400: '#f43f5e',
+              500: '#e50914',
+              600: '#c40812',
+              700: '#a30710',
+            },
+            danger: {
+              500: '#ef4444',
+              600: '#dc2626',
+            },
+          },
+          boxShadow: {
+            'glass': '0 8px 32px rgba(0, 0, 0, 0.12)',
+            'glass-sm': '0 4px 16px rgba(0, 0, 0, 0.08)',
+            'soft': '0 2px 12px rgba(229, 9, 20, 0.15)',
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: linear-gradient(160deg, #1a1a1a 0%, #0f0f0f 50%, #1a0505 100%);
+      font-family: 'Vazirmatn', Tahoma, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .profile-ring {
+      box-shadow: 0 0 0 3px #e50914, 0 0 0 6px rgba(229, 9, 20, 0.25), 0 8px 24px rgba(229, 9, 20, 0.3);
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .profile-ring:hover {
+      transform: scale(1.04);
+    }
+
+    .info-row {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: background 0.2s ease;
+    }
+
+    .info-row:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-action {
+      transition: all 0.25s ease;
+      font-size: 0.8125rem;
+    }
+
+    .btn-action:active {
+      transform: scale(0.96);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #e50914, #c40812);
+      box-shadow: 0 4px 14px rgba(229, 9, 20, 0.35);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 6px 20px rgba(229, 9, 20, 0.45);
+    }
+
+    .btn-outline {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+
+    .btn-outline:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      color: #f87171;
+    }
+
+    .btn-danger:hover {
+      background: rgba(239, 68, 68, 0.25);
+    }
+
+    .btn-home {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .btn-home:hover {
+      background: rgba(255, 255, 255, 0.14);
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      animation: fadeIn 0.2s ease;
+    }
+
+    .modal-content {
+      background: rgba(30, 30, 30, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 1.5rem;
+      border-radius: 1.25rem;
+      max-width: 20rem;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+      animation: scaleIn 0.25s ease;
+    }
+
+    .delete-confirmation-input {
+      direction: ltr;
+      text-align: center;
+      letter-spacing: 0.15em;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+
+    .delete-confirmation-input:focus {
+      outline: none;
+      border-color: #e50914;
+      box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.25);
+    }
+
+    .notification {
+      position: fixed;
+      bottom: 24px;
+      right: 16px;
+      left: 16px;
+      max-width: 320px;
+      margin: 0 auto;
+      background: rgba(30, 30, 30, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #fff;
+      padding: 0.75rem 1.25rem;
+      border-radius: 0.875rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: all 0.3s ease;
+      text-align: center;
+      font-size: 0.875rem;
+    }
+
+    .notification.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .verified-badge {
+      background: linear-gradient(135deg, #e50914, #c40812);
+      box-shadow: 0 2px 8px rgba(229, 9, 20, 0.4);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.92); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-fadeInUp {
+      animation: fadeInUp 0.4s ease-out;
+    }
+
+    .skeleton {
+      background: linear-gradient(90deg, rgba(255,255,255,0.06) 25%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.06) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app" class="w-full h-full flex items-center justify-center p-4"></div>
+
+  <!-- React & Firebase Libraries -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+  <script type="text/babel">
+    const { useState, useEffect, useCallback, useMemo } = React;
+
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDLfUbSG30O474XPAPY8QpMzo19EMfLWFc",
+      authDomain: "josh-7b6a0.firebaseapp.com",
+      databaseURL: "https://josh-7b6a0-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "josh-7b6a0",
+      storageBucket: "josh-7b6a0.appspot.com",
+      messagingSenderId: "639816255525",
+      appId: "1:639816255525:web:71a3e87374c3e7c68e17cc",
+      measurementId: "G-P2ZSBTN8FP"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth(app);
+    const database = firebase.database(app);
+
+    const ProfilePage = () => {
+      const [user, setUser] = useState(null);
+      const [profile, setProfile] = useState(null);
+      const [loading, setLoading] = useState(true);
+      const [showLogoutModal, setShowLogoutModal] = useState(false);
+      const [showDeleteModal, setShowDeleteModal] = useState(false);
+      const [deleteConfirmation, setDeleteConfirmation] = useState('');
+      const [deleting, setDeleting] = useState(false);
+
+      const showNotification = useCallback((message) => {
+        const notification = document.createElement('div');
+        notification.className = 'notification';
+        notification.textContent = message;
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+          notification.classList.add('visible');
+        }, 10);
+
+        setTimeout(() => {
+          notification.classList.remove('visible');
+          setTimeout(() => {
+            if (document.body.contains(notification)) {
+              document.body.removeChild(notification);
+            }
+          }, 300);
+        }, 3000);
+      }, []);
+
+      useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged((authUser) => {
+          try {
+            if (!authUser) {
+              Swal.fire({
+                title: 'لطفاً وارد شوید',
+                text: 'برای دسترسی به پروفایل باید وارد حساب کاربری شوید',
+                icon: 'warning',
+                confirmButtonText: 'متوجه شدم',
+                confirmButtonColor: '#e50914',
+                background: 'rgba(30, 30, 30, 0.95)',
+                color: '#fff',
+                backdrop: true
+              }).then(() => {
+                window.location.href = 'index.html';
+              });
+              return;
+            }
+
+            const isSocialLogin = authUser.providerData?.some(
+              provider => provider.providerId === 'google.com' || provider.providerId === 'facebook.com'
+            );
+
+            if (!authUser.emailVerified && !isSocialLogin) {
+              Swal.fire({
+                title: 'تأیید ایمیل لازم است',
+                text: 'لطفاً ایمیل خود را تأیید کنید',
+                icon: 'warning',
+                confirmButtonText: 'متوجه شدم',
+                confirmButtonColor: '#e50914',
+                background: 'rgba(30, 30, 30, 0.95)',
+                color: '#fff',
+                backdrop: true
+              }).then(() => {
+                window.location.href = 'index.html';
+              });
+              return;
+            }
+
+            setUser(authUser);
+            loadProfileData(authUser.uid);
+          } catch (error) {
+            console.error('Auth state error:', error);
+            showNotification('خطا در بررسی وضعیت ورود');
+          }
+        });
+
+        return () => unsubscribe();
+      }, [showNotification]);
+
+      const loadProfileData = useCallback((userId) => {
+        setLoading(true);
+        const userRef = database.ref('users/' + userId);
+
+        userRef.on('value', (snapshot) => {
+          try {
+            if (snapshot.exists()) {
+              setProfile(snapshot.val());
+            } else {
+              showNotification('اطلاعات کاربر یافت نشد');
+            }
+            setLoading(false);
+          } catch (error) {
+            console.error('Error loading profile:', error);
+            showNotification('خطا در بارگذاری اطلاعات پروفایل');
+            setLoading(false);
+          }
+        }, (error) => {
+          console.error('Error fetching data:', error);
+          showNotification('خطا در دریافت اطلاعات');
+          setLoading(false);
+        });
+      }, [showNotification]);
+
+      const handleLogout = useCallback(async () => {
+        try {
+          await auth.signOut();
+          setShowLogoutModal(false);
+          Swal.fire({
+            title: 'خروج موفق',
+            text: 'شما با موفقیت از حساب خود خارج شدید',
+            icon: 'success',
+            confirmButtonText: 'متوجه شدم',
+            confirmButtonColor: '#e50914',
+            background: 'rgba(30, 30, 30, 0.95)',
+            color: '#fff',
+            backdrop: true
+          }).then(() => {
+            window.location.href = 'index.html';
+          });
+        } catch (error) {
+          console.error('Logout error:', error);
+          showNotification('خطا در خروج از حساب');
+        }
+      }, [showNotification]);
+
+      const handleDeleteAccount = useCallback(async () => {
+        if (deleteConfirmation !== 'حذف') {
+          Swal.fire({
+            title: 'ورودی نامعتبر',
+            text: 'لطفاً کلمه "حذف" را به درستی وارد کنید',
+            icon: 'error',
+            confirmButtonText: 'متوجه شدم',
+            confirmButtonColor: '#e50914',
+            background: 'rgba(30, 30, 30, 0.95)',
+            color: '#fff',
+            backdrop: true
+          });
+          return;
+        }
+
+        setDeleting(true);
+        try {
+          const userRef = database.ref('users/' + user.uid);
+          await userRef.remove();
+          await user.delete();
+
+          Swal.fire({
+            title: 'حساب حذف شد',
+            text: 'حساب کاربری شما با موفقیت حذف شد',
+            icon: 'success',
+            confirmButtonText: 'متوجه شدم',
+            confirmButtonColor: '#e50914',
+            background: 'rgba(30, 30, 30, 0.95)',
+            color: '#fff',
+            backdrop: true
+          }).then(() => {
+            window.location.href = 'index.html';
+          });
+        } catch (error) {
+          console.error('Delete account error:', error);
+          if (error.code === 'auth/requires-recent-login') {
+            Swal.fire({
+              title: 'ورود مجدد لازم است',
+              text: 'برای حذف حساب، لطفاً مجدداً وارد شوید',
+              icon: 'error',
+              confirmButtonText: 'متوجه شدم',
+              confirmButtonColor: '#e50914',
+              background: 'rgba(30, 30, 30, 0.95)',
+              color: '#fff',
+              backdrop: true
+            }).then(() => {
+              auth.signOut();
+              window.location.href = 'index.html';
+            });
+          } else {
+            showNotification('خطا در حذف حساب');
+          }
+        } finally {
+          setDeleting(false);
+          setShowDeleteModal(false);
+          setDeleteConfirmation('');
+        }
+      }, [deleteConfirmation, user, showNotification]);
+
+      const isEmailVerified = useMemo(() => {
+        return user?.emailVerified || user?.providerData?.some(
+          provider => provider.providerId === 'google.com' || provider.providerId === 'facebook.com'
+        );
+      }, [user]);
+
+      if (!user) {
+        return (
+          <div className="flex flex-col items-center justify-center">
+            <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-primary-500"></div>
+            <p className="mt-4 text-white/60 text-sm">در حال بررسی وضعیت احراز هویت...</p>
+          </div>
+        );
+      }
+
+      return (
+        <div className="w-full max-w-sm mx-auto animate-fadeInUp">
+          {/* Logout Confirmation Modal */}
+          {showLogoutModal && (
+            <div className="modal-overlay">
+              <div className="modal-content">
+                <div className="w-12 h-12 rounded-full bg-primary-500/20 flex items-center justify-center mx-auto mb-3">
+                  <i className="fas fa-sign-out-alt text-primary-400 text-lg"></i>
+                </div>
+                <h3 className="text-base font-bold text-white mb-2">خروج از حساب</h3>
+                <p className="text-white/60 text-sm mb-5">آیا مطمئن هستید که می‌خواهید خارج شوید؟</p>
+                <div className="flex gap-3">
+                  <button
+                    onClick={handleLogout}
+                    className="flex-1 btn-primary text-white py-2.5 rounded-xl text-sm font-medium"
+                  >
+                    تأیید
+                  </button>
+                  <button
+                    onClick={() => setShowLogoutModal(false)}
+                    className="flex-1 btn-outline py-2.5 rounded-xl text-sm font-medium"
+                  >
+                    لغو
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Delete Account Confirmation Modal */}
+          {showDeleteModal && (
+            <div className="modal-overlay">
+              <div className="modal-content">
+                <div className="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center mx-auto mb-3">
+                  <i className="fas fa-exclamation-triangle text-red-400 text-lg"></i>
+                </div>
+                <h3 className="text-base font-bold text-white mb-2">حذف حساب کاربری</h3>
+                <p className="text-white/60 text-sm mb-3">این عمل غیرقابل بازگشت است!</p>
+                <p className="text-xs text-white/40 mb-2">کلمه «<span className="font-bold text-white/70">حذف</span>» را تایپ کنید:</p>
+                <input
+                  type="text"
+                  value={deleteConfirmation}
+                  onChange={(e) => setDeleteConfirmation(e.target.value)}
+                  className="delete-confirmation-input w-full p-2.5 rounded-lg text-sm mb-4"
+                  placeholder="حذف"
+                  dir="auto"
+                />
+                <div className="flex gap-3">
+                  <button
+                    onClick={handleDeleteAccount}
+                    disabled={deleting || deleteConfirmation !== 'حذف'}
+                    className={`flex-1 py-2.5 rounded-xl text-sm font-medium flex items-center justify-center gap-2 ${
+                      deleting || deleteConfirmation !== 'حذف'
+                        ? 'bg-white/10 text-white/30 cursor-not-allowed'
+                        : 'bg-danger-500 text-white'
+                    }`}
+                  >
+                    {deleting ? (
+                      <>
+                        <div className="animate-spin rounded-full h-3.5 w-3.5 border-t-2 border-b-2 border-white"></div>
+                        در حال حذف...
+                      </>
+                    ) : (
+                      <>
+                        <i className="fas fa-trash-alt text-xs"></i>
+                        حذف حساب
+                      </>
+                    )}
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowDeleteModal(false);
+                      setDeleteConfirmation('');
+                    }}
+                    className="flex-1 btn-outline py-2.5 rounded-xl text-sm font-medium"
+                  >
+                    لغو
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Main Profile Card */}
+          <div className="glass-card rounded-3xl overflow-hidden">
+            {/* Profile Header */}
+            <div className="pt-8 pb-5 px-6 flex flex-col items-center">
+              <div className="relative mb-4">
+                <img
+                  src={profile?.profilePhoto || 'https://via.placeholder.com/120?text=+'}
+                  alt="عکس پروفایل"
+                  className="w-24 h-24 rounded-full profile-ring object-cover"
+                  loading="lazy"
+                />
+                {loading && (
+                  <div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-white"></div>
+                  </div>
+                )}
+                {isEmailVerified && (
+                  <span className="absolute -bottom-1 -right-1 verified-badge text-white text-[10px] font-bold w-6 h-6 rounded-full flex items-center justify-center">
+                    <i className="fas fa-check text-[9px]"></i>
+                  </span>
+                )}
+              </div>
+              <h2 className="text-lg font-bold text-white tracking-tight">
+                {loading ? (
+                  <span className="inline-block h-5 w-28 skeleton rounded"></span>
+                ) : (
+                  profile?.fullname || 'کاربر'
+                )}
+              </h2>
+              {isEmailVerified && (
+                <span className="mt-1 text-[11px] text-primary-400 font-medium flex items-center gap-1">
+                  <i className="fas fa-badge-check text-[10px]"></i>
+                  تأیید شده
+                </span>
+              )}
+            </div>
+
+            {/* Compact Info Section */}
+            <div className="px-5 pb-5 space-y-2">
+              {loading ? (
+                <>
+                  <div className="h-11 skeleton rounded-xl"></div>
+                  <div className="h-11 skeleton rounded-xl"></div>
+                  <div className="h-11 skeleton rounded-xl"></div>
+                </>
+              ) : (
+                <>
+                  <div className="info-row flex items-center gap-3 px-3.5 py-2.5 rounded-xl">
+                    <div className="w-8 h-8 rounded-lg bg-primary-500/15 flex items-center justify-center shrink-0">
+                      <i className="fas fa-user text-primary-400 text-xs"></i>
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[10px] text-white/40 leading-none mb-0.5">نام کامل</p>
+                      <p className="text-sm text-white/90 font-medium truncate">{profile?.fullname || 'ثبت نشده'}</p>
+                    </div>
+                  </div>
+                  <div className="info-row flex items-center gap-3 px-3.5 py-2.5 rounded-xl">
+                    <div className="w-8 h-8 rounded-lg bg-primary-500/15 flex items-center justify-center shrink-0">
+                      <i className="fas fa-phone text-primary-400 text-xs"></i>
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[10px] text-white/40 leading-none mb-0.5">شماره تلفن</p>
+                      <p className="text-sm text-white/90 font-medium truncate" dir="ltr">{profile?.phone || 'ثبت نشده'}</p>
+                    </div>
+                  </div>
+                  <div className="info-row flex items-center gap-3 px-3.5 py-2.5 rounded-xl">
+                    <div className="w-8 h-8 rounded-lg bg-primary-500/15 flex items-center justify-center shrink-0">
+                      <i className="fas fa-envelope text-primary-400 text-xs"></i>
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[10px] text-white/40 leading-none mb-0.5">ایمیل</p>
+                      <p className="text-sm text-white/90 font-medium truncate" dir="ltr">{user?.email || 'ثبت نشده'}</p>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Action Buttons - Compact 2-column grid */}
+            <div className="px-5 pb-6">
+              <div className="grid grid-cols-2 gap-2.5">
+                <button
+                  onClick={() => window.location.href = 'edit_profile.html'}
+                  className="btn-action btn-primary text-white py-2.5 rounded-xl font-medium flex items-center justify-center gap-2"
+                >
+                  <i className="fas fa-user-edit text-xs"></i>
+                  ویرایش
+                </button>
+                <button
+                  onClick={() => window.location.href = 'index.html'}
+                  className="btn-action btn-home py-2.5 rounded-xl font-medium flex items-center justify-center gap-2"
+                >
+                  <i className="fas fa-home text-xs"></i>
+                  خانه
+                </button>
+                <button
+                  onClick={() => setShowLogoutModal(true)}
+                  className="btn-action btn-outline py-2.5 rounded-xl font-medium flex items-center justify-center gap-2"
+                >
+                  <i className="fas fa-sign-out-alt text-xs"></i>
+                  خروج
+                </button>
+                <button
+                  onClick={() => setShowDeleteModal(true)}
+                  className="btn-action btn-danger py-2.5 rounded-xl font-medium flex items-center justify-center gap-2"
+                >
+                  <i className="fas fa-trash-alt text-xs"></i>
+                  حذف حساب
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    // Render the app
+    ReactDOM.render(<ProfilePage />, document.getElementById('app'));
+  </script>
+</body>
+</html>
