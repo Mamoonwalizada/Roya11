@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mamoonwalizada.github.io/Roya11/sitemap.xml
